@@ -38,8 +38,8 @@ fi
 # dump vm definition
 virsh dumpxml ${domain} > "${dstamp}/${domain}.xml"
 
-# copy vm disks (only works if source is file, not pool...)
-disks=$(egrep "<source file=.*\.qcow2" "${dstamp}/${domain}.xml" | cut -d \' -f 2)
+# determine and copy vm disks
+disks=$(egrep "*\.qcow2" "${dstamp}/${domain}.xml" | sed -rf ./backup-domain.sed)
 for d in ${disks}
 do
     cp -v $d "${dstamp}"
